@@ -6,6 +6,9 @@ Created on Mon Jan 22 09:49:18 2018
 @author: josephhiggins
 """
 
+import cvxpy as cvx
+import numpy as np
+
 def sum_elem_product(A,B):
     return cvx.sum_entries(cvx.mul_elemwise(A, B))
 
