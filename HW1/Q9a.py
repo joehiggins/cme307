@@ -12,7 +12,7 @@ import numpy as np
 # Problem data.
 n = 2 #number of dimensions
 
-sensor_location = [0.31,0.15]
+sensor_location = [0.44,0.25]
 
 anchors = np.matrix([
     [ 1, 0],
