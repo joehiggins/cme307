@@ -18,7 +18,7 @@ def col_vec_3elem(a,b,c):
 # Constraints will force Z to look like what its supposed to look like here
 Z = Semidef(3)
 
-sensor_location = [-0.35,0.45]
+sensor_location = [1000,1000]
 
 anchors = np.matrix([
     [ 1, 0],
@@ -28,7 +28,7 @@ anchors = np.matrix([
 
 d = list(map(lambda a: np.linalg.norm(sensor_location - a), anchors))
 
-objective = cvx.Minimize(cvx.sum_entries(Z))
+objective = cvx.Minimize(0)
 
 v0 = col_vec_3elem(1,0,0)
 v1 = col_vec_3elem(0,1,0)
@@ -50,7 +50,15 @@ constraints = [
 prob = Problem(objective, constraints)
 
 # The optimal objective is returned by prob.solve().
-result = prob.solve()
+result = prob.solve(solver = 'MOSEK')
 # The optimal value for x is stored in x.value.
 print(Z[0,2].value)
 print(Z[1,2].value)
+
+
+
+
+
+
+
+
