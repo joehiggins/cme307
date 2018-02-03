@@ -31,10 +31,6 @@ d_ss = list(map(lambda s1:
         list(map(lambda s2: np.linalg.norm(s1 - s2), sensors))
     , sensors))
 
-'''    
-np.linalg.norm(np.array([1, 0]) - np.array([.2,-.2]))
-np.linalg.norm(np.array([-1, 0]) - np.array([.2,-.2]))
-'''     
 # Construct the problem.
 x = cvx.Variable(2,n)
 objective = cvx.Minimize(0)
