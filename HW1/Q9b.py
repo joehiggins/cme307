@@ -18,7 +18,7 @@ def col_vec_3elem(a,b,c):
 # Constraints will force Z to look like what its supposed to look like here
 Z = Semidef(3)
 
-sensor_location = [1000,1000]
+sensor_location = [100000,100000]
 
 anchors = np.matrix([
     [ 1, 0],
