@@ -12,7 +12,7 @@ import numpy as np
 # Problem data.
 n = 2 #number of dimensions
 
-sensor_location = [0.44,0.25]
+sensor_location = [1/3,1/3]
 
 anchors = np.matrix([
     [ 1, 0],
@@ -24,15 +24,13 @@ d = list(map(lambda a: np.linalg.norm(sensor_location - a), anchors))
 
 # Construct the problem.
 x = cvx.Variable(1,n)
-objective = cvx.Minimize(cvx.norm(x - anchors[0]) + 
-                         cvx.norm(x - anchors[1]) + 
-                         cvx.norm(x - anchors[2]))
+objective = cvx.Minimize(0)
 
 constraints = [cvx.norm(x - anchors[0]) <= d[0],
                cvx.norm(x - anchors[1]) <= d[1],
                cvx.norm(x - anchors[2]) <= d[2]]
 
-prob = Problem(objective, constraints)
+prob = cvx.Problem(objective, constraints)
 
 # The optimal objective is returned by prob.solve().
 result = prob.solve()
@@ -41,3 +39,5 @@ print(x.value)
 # The optimal Lagrange multiplier for a constraint
 # is stored in constraint.dual_value.
 print(constraints[0].dual_value)
+print(constraints[1].dual_value)
+print(constraints[2].dual_value)
