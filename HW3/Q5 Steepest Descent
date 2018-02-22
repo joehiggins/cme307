@@ -23,7 +23,7 @@ def grad(x):
         e**(np.dot(neg_data[1,:], x))/(1 + e**(np.dot(neg_data[1,:], x))) * neg_data[1,:] + \
         e**(np.dot(neg_data[2,:], x))/(1 + e**(np.dot(neg_data[2,:], x))) * neg_data[2,:]
         
-    return -1*pos_data_sum + neg_data_sum
+    return np.transpose(-1*pos_data_sum + neg_data_sum)
 
 #add positive and negative data
 pos_data = np.matrix([
@@ -60,7 +60,7 @@ x_k = x_0
 alpha = 0.5
 while check > 10**-8 and k < max_iter:
 
-    x_k1 = x_k - alpha * np.transpose(grad(x_k))
+    x_k1 = x_k - alpha * grad(x_k)
     check = np.linalg.norm(x_k1 - x_k)
     x_k = x_k1
     k = k+1
