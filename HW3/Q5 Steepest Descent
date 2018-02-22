@@ -7,8 +7,10 @@ Created on Wed Feb 21 20:43:46 2018
 """
 
 import numpy as np
+import random as rand
 e = np.exp(1)
 
+#define gradient function
 def grad(x):
     
     pos_data_sum = \
@@ -23,28 +25,39 @@ def grad(x):
         
     return -1*pos_data_sum + neg_data_sum
 
+#add positive and negative data
 pos_data = np.matrix([
-    [ 0, 0, 1],
-    [ 1, 0, 1],
-    [ 0, 1, 1]
+    [ 0, 0],
+    [ 1, 0],
+    [ 0, 1]
 ])
 neg_data = np.matrix([
-    [ 0, 0, 1],
-    [-1, 0, 1],
-    [ 0,-1, 1]
+    [ 0, 0],
+    [-1, 0],
+    [ 0,-1]
 ])
 
+#add noise
+pos_data = pos_data + np.matrix((np.random.rand(3,2)*0.001))
+neg_data = neg_data + np.matrix((np.random.rand(3,2)*0.001))
+
+#add shift variable
+pos_data = np.hstack((pos_data, np.ones((3,1))))
+neg_data = np.hstack((neg_data, np.ones((3,1))))
+    
+#initialize looping variables
 x_0 = np.matrix([
     [0], 
     [0],
     [0]
 ])
-x_k = x_0
-alpha = 0.5
-
 check = 999
-max_iter = 100000
+max_iter = 1000
 k = 0
+x_k = x_0
+
+#do iteration
+alpha = 0.5
 while check > 10**-8 and k < max_iter:
 
     x_k1 = x_k - alpha * np.transpose(grad(x_k))
@@ -53,13 +66,3 @@ while check > 10**-8 and k < max_iter:
     k = k+1
 
 x_k1
-
-'''
-theory = np.matrix([
-    [0.5],
-    [-0.5],
-    [0]
-])
-    
-np.transpose(grad(theory))
-np.transpose(grad(x_k1))
