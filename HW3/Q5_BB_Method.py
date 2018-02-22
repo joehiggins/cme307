@@ -31,19 +31,19 @@ def new_alpha(x_k, x_km1):
 
 #add positive and negative data
 pos_data = np.matrix([
-    [ 0, 0],
+    [ -.1, -1.],
     [ 1, 0],
     [ 0, 1]
 ])
 neg_data = np.matrix([
-    [ 0, 0],
+    [ .1, .1],
     [-1, 0],
     [ 0,-1]
 ])
 
 #add noise
-pos_data = pos_data + np.matrix((np.random.rand(3,2)*0.001))
-neg_data = neg_data + np.matrix((np.random.rand(3,2)*0.001))
+# pos_data = pos_data + np.matrix((np.random.rand(3,2)*0.001))
+# neg_data = neg_data + np.matrix((np.random.rand(3,2)*0.001))
 
 #add shift variable
 pos_data = np.hstack((pos_data, np.ones((3,1))))
@@ -67,7 +67,7 @@ check = np.linalg.norm(x_k - x_km1)
 
 
 #do iteration
-while check > 10**-8 and k < max_iter:
+while check > 10**-10 and k < max_iter:
     alpha = new_alpha(x_k, x_km1)
     x_kp1 = x_k - alpha * grad(x_k)
     check = np.linalg.norm(x_kp1 - x_k)
@@ -77,4 +77,4 @@ while check > 10**-8 and k < max_iter:
     x_k = x_kp1
     k = k+1
 
-print(x_km1)
+print(x_k)
