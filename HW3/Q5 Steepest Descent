@@ -17,9 +17,9 @@ def grad(x):
         e**(-1*np.dot(pos_data[2,:], x))/(1 + e**(-1*np.dot(pos_data[2,:], x))) * pos_data[2,:]
 
     neg_data_sum = \
-        e**(-1*np.dot(neg_data[0,:], x))/(1 + e**(-1*np.dot(neg_data[0,:], x))) * neg_data[0,:] + \
-        e**(-1*np.dot(neg_data[1,:], x))/(1 + e**(-1*np.dot(neg_data[1,:], x))) * neg_data[1,:] + \
-        e**(-1*np.dot(neg_data[2,:], x))/(1 + e**(-1*np.dot(neg_data[2,:], x))) * neg_data[2,:]
+        e**(np.dot(neg_data[0,:], x))/(1 + e**(np.dot(neg_data[0,:], x))) * neg_data[0,:] + \
+        e**(np.dot(neg_data[1,:], x))/(1 + e**(np.dot(neg_data[1,:], x))) * neg_data[1,:] + \
+        e**(np.dot(neg_data[2,:], x))/(1 + e**(np.dot(neg_data[2,:], x))) * neg_data[2,:]
         
     return -1*pos_data_sum + neg_data_sum
 
