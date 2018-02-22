@@ -1,0 +1,65 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Feb 21 20:43:46 2018
+
+@author: josephhiggins
+"""
+
+import numpy as np
+e = np.exp(1)
+
+def grad(x):
+    
+    pos_data_sum = \
+        e**(-1*np.dot(pos_data[0,:], x))/(1 + e**(-1*np.dot(pos_data[0,:], x))) * pos_data[0,:] + \
+        e**(-1*np.dot(pos_data[1,:], x))/(1 + e**(-1*np.dot(pos_data[1,:], x))) * pos_data[1,:] + \
+        e**(-1*np.dot(pos_data[2,:], x))/(1 + e**(-1*np.dot(pos_data[2,:], x))) * pos_data[2,:]
+
+    neg_data_sum = \
+        e**(-1*np.dot(neg_data[0,:], x))/(1 + e**(-1*np.dot(neg_data[0,:], x))) * neg_data[0,:] + \
+        e**(-1*np.dot(neg_data[1,:], x))/(1 + e**(-1*np.dot(neg_data[1,:], x))) * neg_data[1,:] + \
+        e**(-1*np.dot(neg_data[2,:], x))/(1 + e**(-1*np.dot(neg_data[2,:], x))) * neg_data[2,:]
+        
+    return -1*pos_data_sum + neg_data_sum
+
+pos_data = np.matrix([
+    [ 0, 0, 1],
+    [ 1, 0, 1],
+    [ 0, 1, 1]
+])
+neg_data = np.matrix([
+    [ 0, 0, 1],
+    [-1, 0, 1],
+    [ 0,-1, 1]
+])
+
+
+x_k1 = np.matrix([
+    [999], 
+    [999],
+    [999]
+])    
+x_0 = np.matrix([
+    [0], 
+    [0],
+    [0]
+])
+x_k = x_0
+alpha = 0.5
+
+
+while np.linalg.norm(x_k1 - x_k) > 10**-8:
+
+    x_k1 = x_k - alpha * np.transpose(grad(x_k))
+    x_k = x_k1
+
+x_k1
+
+theory = np.matrix([
+    [0.5],
+    [-0.5],
+    [0]
+])
+    
+np.transpose(grad(theory))
