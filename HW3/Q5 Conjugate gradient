@@ -80,5 +80,4 @@ while check > 10**-8 and k < max_iter:
     g_k = g_k1
     k = k+1
 
-#x_k1
-#grad(x_k1)
+x_k1
