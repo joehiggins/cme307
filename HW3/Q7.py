@@ -21,7 +21,7 @@ beta = 0.5
 meu = 0.01
 
 def func(x):
-    return 1/2 * np.linalg.norm(A*x - b)**2 - meu * np.log(x)
+    return 1/2 * np.linalg.norm(A*x - b)**2 - meu * np.sum(np.log(x))
 
 def grad(x):
     return (np.transpose(A) * (A*x - b) - meu * 1./x)
@@ -32,7 +32,7 @@ def descent(x):
 
 def new_t(x):
     t = 1
-    while func(x + t*descent(x)) > func(x) + alpha * np.dot(grad(x), descent(x)):
+    while func(x + t*descent(x)) > func(x) + alpha * np.dot(np.transpose(descent(x)), grad(x)):
         t = t * beta
     return t
 
@@ -50,3 +50,5 @@ while(check > 10**-8 and k < maxiter):
     x_k = x_k1
     k = k + 1
 x_k
+
+x = x0
