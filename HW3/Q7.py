@@ -14,6 +14,10 @@ A = np.matrix([
 
 b = np.matrix([[-2, 6]])
 
+alpha = 0.25
+
+beta = 0.5
+
 meu = 0.01
 
 def func(x):
@@ -31,3 +35,12 @@ def new_t(x, alpha, beta):
     while func(x + t*descent(x)) > func(x) + alpha * np.dot(grad(x), descent(x)):
         t = t * beta
     return t
+
+x0 = np.matrix([1, 1])
+
+x = x0
+check = 9999
+maxiter = 100000
+k = 0
+while(check > 10**-8 and k < maxiter)
+
