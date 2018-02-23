@@ -12,13 +12,12 @@ A = np.matrix([
     [5, 2]
 ])
 
-b = np.matrix([[-2],[6]])
+x_star = np.matrix([[3],[4]])
+b = A*x_star
 
 alpha = 0.25
-
-beta = 0.5
-
-meu = 0.01
+beta = 0.65
+meu = 0
 
 def func(x):
     return 1/2 * np.linalg.norm(A*x - b)**2 - meu * np.sum(np.log(x))
@@ -32,11 +31,14 @@ def descent(x):
 
 def new_t(x):
     t = 1
-    while func(x + t*descent(x)) > func(x) + alpha * np.dot(np.transpose(descent(x)), grad(x)):
+    while sum((x+t*descent(x)) < 0) > 0 or func(x + t*descent(x)) > func(x) + alpha * t * np.dot(np.transpose(descent(x)), grad(x)):
         t = t * beta
     return t
 
-x0 = np.matrix([[1],[1]])
+x0 = np.matrix([
+    [1],
+    [1]
+])
 
 x_k = x0
 check = 9999
@@ -46,9 +48,7 @@ while(check > 10**-8 and k < maxiter):
     
     x_k1 = x_k + new_t(x_k) * descent(x_k)
     check = np.linalg.norm(x_k1 - x_k)
-    print(check)
     x_k = x_k1
     k = k + 1
-x_k
 
-x = x0
+print(x_k)

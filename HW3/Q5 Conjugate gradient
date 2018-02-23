@@ -81,3 +81,6 @@ while check > 10**-8 and k < max_iter:
     k = k+1
 
 x_k1
+
+for row in neg_data:
+    print(row)
