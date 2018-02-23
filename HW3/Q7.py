@@ -30,7 +30,7 @@ def descent(x):
     return -1 * grad(x)
 
 
-def new_t(x, alpha, beta):
+def new_t(x):
     t = 1
     while func(x + t*descent(x)) > func(x) + alpha * np.dot(grad(x), descent(x)):
         t = t * beta
@@ -38,9 +38,15 @@ def new_t(x, alpha, beta):
 
 x0 = np.matrix([1, 1])
 
-x = x0
+x_k = x0
 check = 9999
 maxiter = 100000
 k = 0
-while(check > 10**-8 and k < maxiter)
-
+while(check > 10**-8 and k < maxiter):
+    
+    x_k1 = x_k + new_t(x_k) * descent(x_k)
+    check = np.linalg.norm(x_k1 - x_k)
+    print(check)
+    x_k = x_k1
+    k = k + 1
+x_k
