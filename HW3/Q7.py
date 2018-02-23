@@ -12,7 +12,7 @@ A = np.matrix([
     [5, 2]
 ])
 
-b = np.matrix([[-2, 6]])
+b = np.matrix([[-2],[6]])
 
 alpha = 0.25
 
@@ -24,7 +24,7 @@ def func(x):
     return 1/2 * np.linalg.norm(A*x - b)**2 - meu * np.log(x)
 
 def grad(x):
-    return (np.tranpose(A) * (A*x - b) - meu * 1./x)
+    return (np.transpose(A) * (A*x - b) - meu * 1./x)
 
 def descent(x):
     return -1 * grad(x)
@@ -36,7 +36,7 @@ def new_t(x):
         t = t * beta
     return t
 
-x0 = np.matrix([1, 1])
+x0 = np.matrix([[1],[1]])
 
 x_k = x0
 check = 9999
