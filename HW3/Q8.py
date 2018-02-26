@@ -93,29 +93,34 @@ def descent(X):
 def tgd(X):
     lhs = np.dot(np.transpose(get_cumsum(X)), X) - mu * np.identity(X.shape[0])
     rhs = half_grad(X)
-    return np.dot(lhs, rhs)
+    print(sum_mult(lhs, rhs))
+    return sum_mult(lhs, rhs)
     
     # return -1 * np.dot(np.dot(X, phi_grad),
 
 def new_t(X):
     t = 1
-    while np.sum(X+t*descent(X) < 0) > 0 or phi(X + t*descent(X)) > phi(X) + alpha * t * tgd(X):
+    while np.abs(np.linalg.det(X)) < 10**(-6) or phi(X + t*descent(X)) > phi(X) + alpha * t * tgd(X):
         t = t * beta
+        print(np.abs(np.linalg.det(X)) < 10**(-6))
+        print(t)
     return t
 
 sensors_0 = np.matrix([
-    [ .1, .1],
-    [ 0, .4]
+    [ .3, .1],
+    [ 0, .7]
 ])
     
 Y = np.dot(np.transpose(sensors_0), sensors_0)
 
-X0 = np.matrix([
-    [             1,              0, sensors_0[0,0], sensors_0[0,1]],
-    [             0,              1, sensors_0[1,0], sensors_0[1,1]],
-    [sensors_0[0,0], sensors_0[1,0],         Y[0,0],         Y[0,1]],
-    [sensors_0[0,1], sensors_0[1,1],         Y[1,0],         Y[1,1]],
-])
+# X0 = np.matrix([
+#     [             1,              0, sensors_0[0,0], sensors_0[0,1]],
+#     [             0,              1, sensors_0[1,0], sensors_0[1,1]],
+#     [sensors_0[0,0], sensors_0[1,0],         Y[0,0],         Y[0,1]],
+#     [sensors_0[0,1], sensors_0[1,1],         Y[1,0],         Y[1,1]],
+# ])
+
+X0 = np.identity(4)
 
 X_k = X0
 check = 9999
@@ -124,16 +129,19 @@ k = 0
 
 X = X0
 
-mu = 0.01
-alpha = 0.01
+
+mu = 10**-4
+alpha = 0.1
 while(check > 10**-8 and k < maxiter):
     
     print(np.real(X_k))
     
-    X_k1 = X_k + new_t(X_k) * descent(X_k)
+    X_k1 = X_k + alpha * descent(X_k)
     check = np.linalg.norm(X_k1 - X_k)
     X_k = X_k1
     k = k + 1
+print("ah")
+phi(X0)
     
 np.real(X_k1)
 #X_k1[2:4,0:2]
