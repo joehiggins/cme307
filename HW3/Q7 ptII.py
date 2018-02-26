@@ -30,7 +30,10 @@ def descent(x):
 
 def new_t(x):
     t = 1
-    while sum((x+t*descent(x)) < 0) > 0 or func(x + t*descent(x)) > func(x) + alpha * t * np.dot(np.transpose(descent(x)), grad(x)):
+    while sum((x+t*descent(x)) < 0) > 0 \
+            or func(x + t*descent(x)) > \
+                func(x) + alpha * t * \
+                np.dot(np.transpose(descent(x)), grad(x)):
         t = t * beta
     return t
 
@@ -50,4 +53,5 @@ while(check > 10**-8 and k < maxiter):
     x_k = x_k1
     k = k + 1
 
+print(k)
 print(x_k)
