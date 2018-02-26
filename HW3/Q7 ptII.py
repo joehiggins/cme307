@@ -17,7 +17,7 @@ b = A*x_star
 
 alpha = 0.25
 beta = 0.65
-meu = 0
+meu = 10**-4
 
 def func(x):
     return 1/2 * np.linalg.norm(A*x - b)**2 - meu * np.sum(np.log(x))
