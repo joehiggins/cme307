@@ -76,7 +76,7 @@ def grad(X):
     vec = transform(X) - b
     cumsum = 0
     for i, A_i in enumerate(A):
-        cumsum += A_i + vec[i]
+        cumsum += np.multiply(A_i, vec[i])
     
     X_sqrt = sp.linalg.sqrtm(X)
     
