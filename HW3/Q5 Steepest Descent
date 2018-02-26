@@ -52,7 +52,7 @@ x_0 = np.matrix([
     [0]
 ])
 check = 999
-max_iter = 1000
+max_iter = 999999
 k = 0
 x_k = x_0
 
@@ -63,6 +63,7 @@ while check > 10**-8 and k < max_iter:
     x_k1 = x_k - alpha * grad(x_k)
     check = np.linalg.norm(x_k1 - x_k)
     x_k = x_k1
+    print(x_k)
     k = k+1
 
 x_k1
