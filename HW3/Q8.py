@@ -50,6 +50,9 @@ b = np.matrix([
     [np.linalg.norm(sensors[0] - sensors[1])**2]
 ])
 
+alpha = 0.25
+beta = 0.65
+
 def sum_mult(A, X):
     return np.sum(np.multiply(A, X))
     
@@ -71,14 +74,51 @@ def func(X):
 
 def phi(X):
     return func(X) - mu * np.log(np.linalg.det(X))
-    
-def grad(X):
+
+def get_cumsum(X):
     vec = transform(X) - b
     cumsum = 0
     for i, A_i in enumerate(A):
         cumsum = cumsum + np.multiply(A_i, vec[i])
+    return cumsum
     
-    return cumsum - (mu * np.identity(X.shape[0]))
+# grad(phi(X))*X
+def half_grad(X):
+    return np.dot(get_cumsum(X), X) - mu * np.identity(X.shape[0])
+
+def descent(X):
+    return -1 * np.dot(X, half_grad(X))
+
+# transpose(grad(phi(X))) * descent
+def tgd(X):
+    lhs = np.dot(np.transpose(get_cumsum(X)), X) - mu * np.identity(X.shape[0])
+    rhs = half_grad(X)
+    print(sum_mult(lhs, rhs))
+    return sum_mult(lhs, rhs)
+    
+    # return -1 * np.dot(np.dot(X, phi_grad),
+
+def new_t(X):
+    t = 1
+    while np.abs(np.linalg.det(X)) < 10**(-6) or phi(X + t*descent(X)) > phi(X) + alpha * t * tgd(X):
+        t = t * beta
+        print(np.abs(np.linalg.det(X)) < 10**(-6))
+        print(t)
+    return t
+
+sensors_0 = np.matrix([
+    [ .3, .1],
+    [ 0, .7]
+])
+    
+Y = np.dot(np.transpose(sensors_0), sensors_0)
+
+# X0 = np.matrix([
+#     [             1,              0, sensors_0[0,0], sensors_0[0,1]],
+#     [             0,              1, sensors_0[1,0], sensors_0[1,1]],
+#     [sensors_0[0,0], sensors_0[1,0],         Y[0,0],         Y[0,1]],
+#     [sensors_0[0,1], sensors_0[1,1],         Y[1,0],         Y[1,1]],
+# ])
 
 X0 = np.identity(4)
 
@@ -89,16 +129,18 @@ k = 0
 
 X = X0
 
-mu = 0.001
-alpha = 0.03
+mu = 10**-4
+alpha = 0.1
 while(check > 10**-8 and k < maxiter):
     
     print(np.real(X_k))
     
-    X_k1 = X_k - alpha * np.dot(np.dot(X_k, grad(X_k)), X_k)
+    X_k1 = X_k + alpha * descent(X_k)
     check = np.linalg.norm(X_k1 - X_k)
     X_k = X_k1
     k = k + 1
+print("ah")
+phi(X0)
     
 np.real(X_k1)
 #grad(X_k1)
