@@ -50,9 +50,6 @@ b = np.matrix([
     [np.linalg.norm(sensors[0] - sensors[1])**2]
 ])
 
-alpha = 0.25
-beta = 0.65
-
 def sum_mult(A, X):
     return np.sum(np.multiply(A, X))
     
@@ -74,40 +71,14 @@ def func(X):
 
 def phi(X):
     return func(X) - mu * np.log(np.linalg.det(X))
-
-def get_cumsum(X):
+    
+def grad(X):
     vec = transform(X) - b
     cumsum = 0
     for i, A_i in enumerate(A):
         cumsum = cumsum + np.multiply(A_i, vec[i])
-    return cumsum
     
-# grad(phi(X))*X
-def half_grad(X):
-    return np.dot(get_cumsum(X), X) - mu * np.identity(X.shape[0])
-
-def descent(X):
-    return -1 * np.dot(X, half_grad(X))
-
-# transpose(grad(phi(X))) * descent
-def tgd(X):
-    lhs = np.dot(np.transpose(get_cumsum(X)), X) - mu * np.identity(X.shape[0])
-    rhs = half_grad(X)
-    return sum_mult(lhs, rhs)
-    
-    # return -1 * np.dot(np.dot(X, phi_grad),
-
-def new_t(X):
-    t = 1
-    smalles_eig_orig = np.sort(np.linalg.eig(X)[0])[0]
-    eigen_value_too_big = True
-    while eigen_value_too_big or phi(X + t*descent(X)) > phi(X) + alpha * t * tgd(X):
-        t = t * beta
-        X_k1 = X + t * descent(X)
-        smallest_eig = np.sort(np.linalg.eig(X_k1)[0])[0]
-        eigen_value_too_big = smallest_eig < (1/3 * smalles_eig_orig)
-    return t
-
+    return cumsum - (mu * np.identity(X.shape[0]))
 
 X0 = np.identity(4)
 
@@ -118,17 +89,16 @@ k = 0
 
 X = X0
 
-mu = .001
+mu = 0.001
+alpha = 0.03
 while(check > 10**-8 and k < maxiter):
     
     print(np.real(X_k))
     
-    X_k1 = X_k + new_t(X_k) * descent(X_k)
+    X_k1 = X_k - alpha * np.dot(np.dot(X_k, grad(X_k)), X_k)
     check = np.linalg.norm(X_k1 - X_k)
     X_k = X_k1
     k = k + 1
-print("ah")
-phi(X0)
     
 np.real(X_k1)
 #grad(X_k1)
