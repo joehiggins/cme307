@@ -113,7 +113,7 @@ X0 = np.identity(4)
 
 X_k = X0
 check = 9999
-maxiter = 999999
+maxiter = 99999
 k = 0
 
 X = X0
@@ -127,9 +127,6 @@ while(check > 10**-8 and k < maxiter):
     check = np.linalg.norm(X_k1 - X_k)
     X_k = X_k1
     k = k + 1
-print("ah")
-phi(X0)
     
 np.real(X_k1)
-#grad(X_k1)
     
