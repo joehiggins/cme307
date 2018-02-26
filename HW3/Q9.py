@@ -47,13 +47,13 @@ def grad(X):
         
 
 #initialize looping variables
-''' 
+
 #SOCP result GUESS
 sensors_0 = np.matrix([
     [-.440502, 0.14807],
     [-.40809, 0.74565],
 ])
-'''
+
 ''' 
 #SDP result GUESS
 sensors_0 = np.matrix([
@@ -61,11 +61,12 @@ sensors_0 = np.matrix([
     [ .21649, 0.641756],
 ])
 '''
+'''
 sensors_0 = np.matrix([
     [-.50000, 0.207108],
     [ .21649, 0.641756],
 ])
-
+'''
 check = 999
 max_iter = 999999999
 k = 0
