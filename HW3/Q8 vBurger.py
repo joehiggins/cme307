@@ -1,18 +1,9 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Sun Feb 25 14:32:23 2018
-
-@author: josephhiggins
-"""
-
-
 import numpy as np
 import scipy as sp
 
 sensors= np.matrix([
     [0.1, 0.3],
-    [  0, 0.4]
+    [0, 0.4]
 ])
 
 anchors = np.matrix([
@@ -21,17 +12,25 @@ anchors = np.matrix([
     [ 0, 2]
 ])
 
-A_1 = np.matrix([[1], [0], [0], [0]]) * np.transpose(np.matrix([[1], [0], [0], [0]]))
-A_2 = np.matrix([[0], [1], [0], [0]]) * np.transpose(np.matrix([[0], [1], [0], [0]]))
-A_3 = np.matrix([[1], [1], [0], [0]]) * np.transpose(np.matrix([[1], [1], [0], [0]]))
+A_1 = np.matrix([[1], [0], [0], [0]]) * \
+        np.transpose(np.matrix([[1], [0], [0], [0]]))
+A_2 = np.matrix([[0], [1], [0], [0]]) * \
+        np.transpose(np.matrix([[0], [1], [0], [0]]))
+A_3 = np.matrix([[1], [1], [0], [0]]) * \
+        np.transpose(np.matrix([[1], [1], [0], [0]]))
 
-A_4 = np.vstack((np.transpose(anchors[0]), -1, 0)) * np.transpose(np.vstack((np.transpose(anchors[0]), -1, 0)))
-A_5 = np.vstack((np.transpose(anchors[1]), -1, 0)) * np.transpose(np.vstack((np.transpose(anchors[1]), -1, 0)))
+A_4 = np.vstack((np.transpose(anchors[0]), -1, 0)) * \
+        np.transpose(np.vstack((np.transpose(anchors[0]), -1, 0)))
+A_5 = np.vstack((np.transpose(anchors[1]), -1, 0)) * \
+        np.transpose(np.vstack((np.transpose(anchors[1]), -1, 0)))
 
-A_6 = np.vstack((np.transpose(anchors[1]), 0, -1)) * np.transpose(np.vstack((np.transpose(anchors[1]), 0, -1)))
-A_7 = np.vstack((np.transpose(anchors[2]), 0, -1)) * np.transpose(np.vstack((np.transpose(anchors[2]), 0, -1)))
+A_6 = np.vstack((np.transpose(anchors[1]), 0, -1)) * \
+        np.transpose(np.vstack((np.transpose(anchors[1]), 0, -1)))
+A_7 = np.vstack((np.transpose(anchors[2]), 0, -1)) * \
+        np.transpose(np.vstack((np.transpose(anchors[2]), 0, -1)))
 
-A_8 = np.matrix([[0], [0], [1], [-1]]) * np.transpose(np.matrix([[0], [0], [1], [-1]]))
+A_8 = np.matrix([[0], [0], [1], [-1]]) * \
+        np.transpose(np.matrix([[0], [0], [1], [-1]]))
 
 
 A = [A_1, A_2, A_3, A_4, A_5, A_6, A_7, A_8]
@@ -91,25 +90,34 @@ def descent(X):
 
 # transpose(grad(phi(X))) * descent
 def tgd(X):
-    lhs = np.dot(np.transpose(get_cumsum(X)), X) - mu * np.identity(X.shape[0])
+    lhs = np.dot(np.transpose(get_cumsum(X)), X) - \
+            mu * np.identity(X.shape[0])
     rhs = half_grad(X)
     return sum_mult(lhs, rhs)
-    
     # return -1 * np.dot(np.dot(X, phi_grad),
 
 def new_t(X):
     t = 1
     smalles_eig_orig = np.sort(np.linalg.eig(X)[0])[0]
     eigen_value_too_big = True
-    while eigen_value_too_big or phi(X + t*descent(X)) > phi(X) + alpha * t * tgd(X):
+    while eigen_value_too_big or \
+            phi(X + t*descent(X)) > phi(X) + \
+            alpha * t * sum_mult(np.transpose(test_grad(X)), descent(X)):
         t = t * beta
         X_k1 = X + t * descent(X)
         smallest_eig = np.sort(np.linalg.eig(X_k1)[0])[0]
-        eigen_value_too_big = smallest_eig < (1/3 * smalles_eig_orig)
+        eigen_value_too_big = smallest_eig < (1/7 * smalles_eig_orig)
     return t
 
 
+# grad(phi(X))*X
+def test_grad(X):
+    return get_cumsum(X) - mu * np.linalg.inv(X)
+
 X0 = np.identity(4)
+
+X = np.diag([6,3,5,7])
+np.sort(np.linalg.eig(X)[0])[0]
 
 X_k = X0
 check = 9999
@@ -118,14 +126,13 @@ k = 0
 
 X = X0
 
-mu = .001
+mu = 0
 while(check > 10**-8 and k < maxiter):
     
     X_k1 = X_k + new_t(X_k) * descent(X_k)
     check = np.linalg.norm(X_k1 - X_k)
     X_k = X_k1
     k = k + 1
+
     
-print(k)
-print(X_k1[2:,0:2])
-    
+np.real(X_k1[2:,0:2])
